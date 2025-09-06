@@ -1,5 +1,6 @@
 package com.example.notes.domain
 
+import com.example.notes.presentation.navigation.Screen
 import kotlinx.coroutines.flow.Flow
 
 interface NotesRepository { //c интерфейсом работают useCases
@@ -14,7 +15,8 @@ interface NotesRepository { //c интерфейсом работают useCases
 
     fun getAllNotes():Flow<List<Note>>
 
-    suspend fun getNote(noteId:Int): Note
+    //suspend fun getNote(noteId:Int): Note
+    fun getNote(noteId:Int):Flow<Note?>
 
     fun searchNotes(query:String):Flow<List<Note>> // поиск по определенному запросу
 

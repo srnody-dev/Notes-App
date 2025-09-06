@@ -51,9 +51,10 @@ import com.example.notes.presentation.utils.DateFormatter
 fun EditNoteScreen(
     noteId: Int,
     modifier: Modifier = Modifier,
-    viewModel: EditNoteViewModel = hiltViewModel(creationCallback = { factory: EditNoteViewModel.Factory ->
-        factory.create(noteId)
-    },
+    viewModel: EditNoteViewModel = hiltViewModel(
+        creationCallback = { factory: EditNoteViewModel.Factory ->
+            factory.create(noteId)
+        },
     ),
     onFinished: () -> Unit
 ) {
@@ -101,14 +102,19 @@ fun EditNoteScreen(
 
 
 
-                                Icon(
-                                    modifier = Modifier
-                                        .padding(end = 16.dp)
-                                        .clickable { viewModel.proccesCommand(EditNoteCommand.Delete) },
-                                    imageVector = Icons.Default.Favorite,
-                                    contentDescription = null,
-                                )
-
+                            Icon(
+                                modifier = Modifier
+                                    .padding(end = 16.dp)
+                                    .clickable {
+                                        viewModel.proccesCommand(
+                                            EditNoteCommand.SwitchPinnedStatus(
+                                                noteId
+                                            )
+                                        )
+                                    },
+                                imageVector = if (currentstate.note.isPin) Icons.Default.Favorite else Icons.Default.FavoriteBorder ,
+                                contentDescription = null,
+                            )
 
 
                         }

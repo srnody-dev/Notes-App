@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.notes.domain.Note
 import kotlinx.coroutines.flow.Flow
 
 
@@ -21,9 +22,12 @@ interface NotesDao {
 
     @Query("DELETE FROM notes WHERE id == :noteId   ")
     suspend fun deleteNotes(noteId:Int)
+/*
+    @Query("SELECT * FROM notes WHERE id== :noteId")
+    suspend fun getNote(noteId: Int):NoteDbModel*/
 
     @Query("SELECT * FROM notes WHERE id== :noteId")
-    suspend fun getNote(noteId: Int):NoteDbModel
+    fun getNote(noteId: Int): Flow<NoteDbModel?>
 
 
 

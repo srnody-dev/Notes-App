@@ -35,8 +35,15 @@ class NotesRepositoryImpl @Inject constructor(private val notesDao: NotesDao) : 
         return notesDao.getAllNotes().map { it.toEntities() }
     }
 
+    /*
+
     override suspend fun getNote(noteId: Int): Note {
         return notesDao.getNote(noteId).toEntity()
+    }*/
+
+
+    override fun getNote(noteId: Int): Flow<Note?> {
+        return notesDao.getNote(noteId).map { it?.toEntity() }
     }
 
     override fun searchNotes(query: String): Flow<List<Note>> {
