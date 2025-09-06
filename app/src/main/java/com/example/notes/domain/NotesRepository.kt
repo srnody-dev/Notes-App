@@ -1,6 +1,5 @@
 package com.example.notes.domain
 
-import com.example.notes.presentation.navigation.Screen
 import kotlinx.coroutines.flow.Flow
 
 interface NotesRepository { //c интерфейсом работают useCases

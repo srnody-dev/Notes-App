@@ -1,6 +1,5 @@
 package com.example.notes.data
 
-import android.content.Context
 import com.example.notes.domain.Note
 import com.example.notes.domain.NotesRepository
 import kotlinx.coroutines.flow.Flow
