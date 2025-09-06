@@ -1,7 +1,6 @@
 package com.example.notes.di
 
 import android.content.Context
-import androidx.room.Database
 import com.example.notes.data.NotesDao
 import com.example.notes.data.NotesDatabase
 import com.example.notes.data.NotesRepositoryImpl

@@ -2,14 +2,12 @@ package com.example.notes.presentation
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import com.example.notes.presentation.navigation.NavGraph
 import com.example.notes.presentation.ui.theme.NotesTheme
 import dagger.hilt.android.AndroidEntryPoint
-import org.apache.http.conn.ConnectTimeoutException
 
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {

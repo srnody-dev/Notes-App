@@ -2,13 +2,11 @@ package com.example.notes.presentation.screens.editing
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.room.util.copy
 import com.example.notes.domain.DeleteNoteUseCase
 import com.example.notes.domain.EditNoteUseCase
 import com.example.notes.domain.GetNoteUseCase
 import com.example.notes.domain.Note
 import com.example.notes.domain.SwitchPinnedStatusUseCase
-import com.example.notes.presentation.screens.notes.NotesCommand
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
