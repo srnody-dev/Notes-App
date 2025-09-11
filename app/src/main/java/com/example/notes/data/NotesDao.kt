@@ -10,6 +10,9 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface NotesDao {
 
+    @Query("SELECT * FROM notes WHERE id = :noteId")
+    suspend fun getNoteSync(noteId: Int): NoteDbModel? // Возвращает один результат
+
 
 
     @Query("SELECT * FROM notes ORDER BY updatedAt DESC")

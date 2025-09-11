@@ -1,3 +1,15 @@
 <resources>
     <string name="app_name">Notes</string>
+    <string name="search">Search...</string>
+    <string name="add_your_first_note">Add your first note!</string>
+    <string name="other">Other</string>
+    <string name="pinned">Pinned</string>
+    <string name="all_notes">All Notes</string>
+    <string name="edit_note_initial">Edit Note</string>
+    <string name="loading_initial">Loading...</string>
+    <string name="note_something_down">Note something down</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="title">Title</string>
+    <string name="save_note">Save Note</string>
+    <string name="create_note">Create Note</string>
 </resources>

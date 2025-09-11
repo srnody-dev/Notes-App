@@ -6,7 +6,7 @@ interface NotesRepository { //c интерфейсом работают useCases
 
  // Овечает на вопрос ЧТО делать,когда NotesRep в data слое отвечает на вопрос КАК делать
 
-   suspend fun addNote(title:String,content:String,isPinned:Boolean,updatedAt:Long)
+   suspend fun addNote(title:String, content:List<ContentItem>, isPinned:Boolean, updatedAt:Long)
 
     suspend fun  deleteNote(noteId:Int)
 

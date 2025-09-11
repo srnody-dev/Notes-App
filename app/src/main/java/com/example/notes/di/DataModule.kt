@@ -1,6 +1,7 @@
 package com.example.notes.di
 
 import android.content.Context
+import androidx.room.Room
 import com.example.notes.data.NotesDao
 import com.example.notes.data.NotesDatabase
 import com.example.notes.data.NotesRepositoryImpl
@@ -23,7 +24,12 @@ interface DataModule {
         @Singleton
         @Provides
         fun providesDatabase(@ApplicationContext context: Context): NotesDatabase {
-            return NotesDatabase.getInstance(context)
+            // return NotesDatabase.getInstance(context)
+            return Room.databaseBuilder(
+                context = context,
+                klass = NotesDatabase::class.java,
+                name = "notes.db"
+            ).fallbackToDestructiveMigration(dropAllTables = true).build()
         }
 
         /*
@@ -31,12 +37,11 @@ interface DataModule {
         @Provides
         fun providesNotesDao(@ApplicationContext context: Context): NotesDao {
             return NotesDatabase.getInstance(context).notesDao()
-        } так нельзя потому что Проблемы:
-
-❌ Каждый раз создает новый экземпляр базы данных через getInstance(context)
-❌ Нарушает паттерн Singleton - база должна создаваться только один раз
-❌ Может привести к утечкам памяти и проблемам с многопоточностью
-❌ Неэффективно - каждый вызов создает новое подключение к БД
+        } так нельзя потому что :
+            Каждый раз создает новый экземпляр базы данных через getInstance(context)
+             Нарушает паттерн Singleton - база должна создаваться только один раз
+            Может привести к утечкам памяти и проблемам с многопоточностью
+            Неэффективно - каждый вызов создает новое подключение к БД
 
         */
 

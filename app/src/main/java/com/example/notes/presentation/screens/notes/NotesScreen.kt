@@ -38,17 +38,19 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.notes.R
+import com.example.notes.domain.ContentItem
 import com.example.notes.domain.Note
 import com.example.notes.presentation.ui.theme.OtherNotesColors
 import com.example.notes.presentation.ui.theme.PinnedNotesColors
 import com.example.notes.presentation.utils.DateFormatter
+import com.example.notes.R
 
 @Composable
 fun NotesScreen(
@@ -62,13 +64,13 @@ fun NotesScreen(
     LocalContext.current.applicationContext
 
 
-
     val state = viewModel.state.collectAsState()
 
     val currentState = state.value
     Scaffold(modifier = modifier, floatingActionButton = {
 
-        FloatingActionButton(modifier = modifier.size(80.dp),
+        FloatingActionButton(
+            modifier = modifier.size(80.dp),
             onClick = {
                 onAddNoteClick()
             },
@@ -88,7 +90,7 @@ fun NotesScreen(
         LazyColumn(
             contentPadding = innerPadding
         ) {
-            item { Title(modifier = Modifier.padding(horizontal = 24.dp), text = "All Notes") }
+            item { Title(modifier = Modifier.padding(horizontal = 24.dp), text = stringResource(R.string.all_notes)) }
             item { Spacer(modifier = Modifier.height(16.dp)) }
             item {
                 SearchBar(
@@ -98,7 +100,7 @@ fun NotesScreen(
             }
             item { Spacer(modifier = Modifier.height(24.dp)) }
             if (currentState.pinnedNotes.isNotEmpty()) {
-                item { Subtitle(text = "Pinned", modifier = Modifier.padding(horizontal = 24.dp)) }
+                item { Subtitle(text = stringResource(R.string.pinned), modifier = Modifier.padding(horizontal = 24.dp)) }
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }
             item {
@@ -112,8 +114,7 @@ fun NotesScreen(
                         items = currentState.pinnedNotes,
                         key = { index, note -> note.id }) { index, note ->
                         NoteCard(
-                            //modifier = Modifier.widthIn(max = 160.dp),
-                            modifier = Modifier.widthIn(max=170.dp, min = 120.dp),
+                            modifier = Modifier.widthIn(max = 170.dp, min = 120.dp),
 
                             note = note,
                             onNoteClick = { onNoteClick(note) },
@@ -131,7 +132,7 @@ fun NotesScreen(
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }
             if (currentState.otherNotes.isNotEmpty()) {
-                item { Subtitle(text = "Other", modifier = Modifier.padding(horizontal = 24.dp)) }
+                item { Subtitle(text = stringResource(R.string.other), modifier = Modifier.padding(horizontal = 24.dp)) }
             }
             item { Spacer(modifier = Modifier.height(16.dp)) }
             itemsIndexed(
@@ -171,14 +172,15 @@ fun NoteCard(
     onNoteClick: (Note) -> Unit,
     onLongClick: (Note) -> Unit
 ) {
-    Column(modifier = modifier
-        .clip(RoundedCornerShape(16.dp))
-        .background(backgroundColor)
-        .combinedClickable(
-            onClick = { onNoteClick(note) },
-            onLongClick = { onLongClick(note) }
-        )
-        .padding(16.dp)
+    Column(
+        modifier = modifier
+            .clip(RoundedCornerShape(16.dp))
+            .background(backgroundColor)
+            .combinedClickable(
+                onClick = { onNoteClick(note) },
+                onLongClick = { onLongClick(note) }
+            )
+            .padding(16.dp)
     )
     {
 
@@ -195,15 +197,23 @@ fun NoteCard(
             fontSize = 12.sp,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
-        Spacer(modifier = Modifier.height(24.dp))
-        Text(
-            text = note.content,
-            fontSize = 16.sp,
-            color = MaterialTheme.colorScheme.onSurface,
-            fontWeight = FontWeight.Medium,
-            maxLines = 3,
-            overflow = TextOverflow.Ellipsis
-        )
+
+
+        //note.content.filterIsInstance<ContentItem.Text>().map { it.content }.joinToString { "\n" } так тоже правильно
+        // но не очень производительно и плюсом контект не отображается почемуто
+        note.content.filterIsInstance<ContentItem.Text>().filter { it.content.isNotBlank() }
+            .joinToString("\n") { it.content }.takeIf { it.isNotBlank() }
+            ?.let {
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = it,
+                    fontSize = 16.sp,
+                    color = MaterialTheme.colorScheme.onSurface,
+                    fontWeight = FontWeight.Medium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
 
 
     }
@@ -212,22 +222,24 @@ fun NoteCard(
 
 @Composable
 private fun FirstAddNote(modifier: Modifier = Modifier) {
-    Column(modifier=modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) { Text(
-        text = "Add your first note!",
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 120.dp),
-        fontSize = 26.sp,
-        fontWeight = FontWeight.Bold,
-        color = MaterialTheme.colorScheme.onBackground,
-        textAlign = TextAlign.Center
-    )
+    Column(modifier = modifier.fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally) {
+        Text(
+            text = stringResource(R.string.add_your_first_note),
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(top = 120.dp),
+            fontSize = 26.sp,
+            fontWeight = FontWeight.Bold,
+            color = MaterialTheme.colorScheme.onBackground,
+            textAlign = TextAlign.Center
+        )
         Spacer(modifier = Modifier.height(20.dp))
         Icon(
             modifier = modifier.size(125.dp),
             painter = painterResource(R.drawable.ic_first_note),
             contentDescription = null
-        )}
+        )
+    }
 
 }
 
@@ -272,9 +284,9 @@ private fun SearchBar(
         onValueChange = onQueryChange,
         placeholder = {
             Text(
+                text = stringResource(R.string.search),
                 fontSize = 14.sp,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                text = "Search"
+                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         },
         colors = TextFieldDefaults.colors(

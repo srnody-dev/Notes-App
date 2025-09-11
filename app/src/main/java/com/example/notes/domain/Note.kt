@@ -6,7 +6,7 @@ data class Note( //сущность с которой будут работат�
 
     val id:Int,
     val title:String,
-    val content:String,
+    val content: List<ContentItem>,
     val updatedAt:Long,
     val isPin:Boolean
 
