@@ -4,7 +4,6 @@ import com.example.notes.domain.ContentItem
 import com.example.notes.domain.Note
 import com.example.notes.domain.NotesRepository
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
@@ -23,15 +22,15 @@ class NotesRepositoryImpl @Inject constructor(
         isPinned: Boolean,
         updatedAt: Long
     ) {
-
-        val note= Note(0, title, content.processForStorage(), updatedAt, isPinned)
-        val noteDbModel = note.toDbModel()
-        notesDao.addNote(noteDbModel)
+        val processesContent=content.processForStorage() //обрабатываем весь контект,чтобы изобр были сохранены в Internal storage
+        val noteDbModel = NoteDbModel(0,title,updatedAt, isPinned) //создаем обьект базы данных
+        val contentDomainToData=processesContent.toContentItemDbModels(noteDbModel.id) // преобразовываем Domain в Data
+        notesDao.addNoteWithContent(contentDomainToData,noteDbModel)
     }
 
     override suspend fun deleteNote(noteId: Int) {
         val note=notesDao.getNoteSync(noteId)?.toEntity()
-        notesDao.deleteNotes(noteId)
+        notesDao.deleteNote(noteId)
 
         note?.content?.filterIsInstance<ContentItem.Image>()?.map { it.url }?.forEach {
             imageFileManager.deleteImage(it)
@@ -48,15 +47,12 @@ class NotesRepositoryImpl @Inject constructor(
         }
         val processedContent=note.content.processForStorage()
         val processedNote=note.copy(content = processedContent)
-        notesDao.addNote(processedNote.toDbModel())
+        notesDao.updateNote(processedContent.toContentItemDbModels(note.id),processedNote.toDbModel())
     }
 
     override fun getAllNotes(): Flow<List<Note>> {
         return notesDao.getAllNotes().map { it.toEntities() }
     }
-
-
-
 
     override fun getNote(noteId: Int): Flow<Note?> {
         return notesDao.getNote(noteId).map { it?.toEntity() }
@@ -90,20 +86,4 @@ class NotesRepositoryImpl @Inject constructor(
         }
     }
 
-    //делать такую проверку даблл чека нет необходимости
-    /*
-
-    companion object{
-        private val LOCK=Any()
-        private var instance:NotesRepositoryImpl?=null
-        fun getInstance(context: Context):NotesRepositoryImpl{
-            instance?.let { return it }
-            synchronized(LOCK){
-                instance?.let { return it }
-                return NotesRepositoryImpl(context).also {
-                    instance=it
-                }
-            }
-        }
-    }*/
 }

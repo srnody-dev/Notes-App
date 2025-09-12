@@ -11,7 +11,6 @@ data class NoteDbModel( //сущность с которой будут рабо
     @PrimaryKey(autoGenerate = true)
     val id:Int,
     val title:String,
-    val content:String,
     val updatedAt:Long,
     val isPin:Boolean
 

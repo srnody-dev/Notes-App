@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Заметки</string>
+    <string name="save_note">Сохранить заметку</string>
+    <string name="create_note">Создание Заметки</string>
+    <string name="search">Поиск…</string>
+    <string name="add_your_first_note">Добавьте свою первую заметку!</string>
+    <string name="other">Другие</string>
+    <string name="pinned">Закреплено</string>
+    <string name="all_notes">Все заметки</string>
+    <string name="edit_note_initial">Редактирование заметки</string>
+    <string name="loading_initial">Загрузка…</string>
+    <string name="note_something_down">Запишите что-нибудь</string>
+    <string name="edit_note">Редактирование заметки</string>
+    <string name="title">Заголовок</string>
+    <string name="just_now">Только что </string>
+    <string name="m_ago">%1$d м назад</string>
+    <string name="h_ago">%1$d ч назад</string>
+</resources>

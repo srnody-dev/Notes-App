@@ -32,19 +32,6 @@ interface DataModule {
             ).fallbackToDestructiveMigration(dropAllTables = true).build()
         }
 
-        /*
-        @Singleton
-        @Provides
-        fun providesNotesDao(@ApplicationContext context: Context): NotesDao {
-            return NotesDatabase.getInstance(context).notesDao()
-        } так нельзя потому что :
-            Каждый раз создает новый экземпляр базы данных через getInstance(context)
-             Нарушает паттерн Singleton - база должна создаваться только один раз
-            Может привести к утечкам памяти и проблемам с многопоточностью
-            Неэффективно - каждый вызов создает новое подключение к БД
-
-        */
-
 
         @Singleton
         @Provides
